@@ -41,16 +41,28 @@
 #include "libswscale/swscale.h"
 #include <libavutil/pixdesc.h>
 
-#define MAX_SEI_LENGTH           4096
+#define MAX_SEI_LENGTH 4096
 
-#define LOG_DEBUG(fmt, ...)      av_log(NULL, AV_LOG_DEBUG,   "[ffio_c][debug]"     fmt "\n",                 ##__VA_ARGS__)
-#define LOG_DEBUG_T(fmt, ...)    av_log(NULL, AV_LOG_DEBUG,   "[ffio_c][debug][%s]" fmt "\n", get_str_time(), ##__VA_ARGS__)
-#define LOG_INFO(fmt, ...)       av_log(NULL, AV_LOG_INFO,    "[ffio_c][info ]"     fmt "\n",                 ##__VA_ARGS__)
-#define LOG_INFO_T(fmt, ...)     av_log(NULL, AV_LOG_INFO,    "[ffio_c][info ][%s]" fmt "\n", get_str_time(), ##__VA_ARGS__)
-#define LOG_WARNING(fmt, ...)    av_log(NULL, AV_LOG_WARNING, "[ffio_c][warn ]"     fmt "\n",                 ##__VA_ARGS__)
-#define LOG_WARNING_T(fmt, ...)  av_log(NULL, AV_LOG_WARNING, "[ffio_c][warn ][%s]" fmt "\n", get_str_time(), ##__VA_ARGS__)
-#define LOG_ERROR(fmt, ...)      av_log(NULL, AV_LOG_ERROR,   "[ffio_c][error]"     fmt "\n",                 ##__VA_ARGS__)
-#define LOG_ERROR_T(fmt, ...)    av_log(NULL, AV_LOG_ERROR,   "[ffio_c][error][%s]" fmt "\n", get_str_time(), ##__VA_ARGS__)
+#define LOG_DEBUG(fmt, ...) \
+    {                       \
+    }
+#define LOG_DEBUG_T(fmt, ...) \
+    {                         \
+    }
+#define LOG_INFO(fmt, ...) \
+    {                      \
+    }
+#define LOG_INFO_T(fmt, ...) \
+    {                        \
+    }
+#define LOG_WARNING(fmt, ...) \
+    {                         \
+    }
+#define LOG_WARNING_T(fmt, ...) \
+    {                           \
+    }
+#define LOG_ERROR(fmt, ...) av_log(NULL, AV_LOG_ERROR, "[ffio_c][error]" fmt "\n", ##__VA_ARGS__)
+#define LOG_ERROR_T(fmt, ...) av_log(NULL, AV_LOG_ERROR, "[ffio_c][error][%s]" fmt "\n", get_str_time(), ##__VA_ARGS__)
 
 typedef struct Clicker
 {
@@ -64,6 +76,6 @@ void av_log_ffio_callback(void *avClass, int level, const char *fmt, va_list vl)
 void print_avcodec_supported_pix_fmt(AVCodec *codec);
 enum AVPixelFormat find_avcodec_1st_sw_pix_fmt(AVCodec *codec);
 enum AVPixelFormat find_avcodec_1st_hw_pix_fmt(AVCodec *codec);
-bool extend_sei_to_av_packet(bool useAnnexB, AVPacket* pkt,const uint8_t* uuid,
-                             const char* message, uint32_t sei_message_size);
-int get_sei_from_av_frame(AVFrame* avFrame, unsigned char* dst, const char* filter);
+bool extend_sei_to_av_packet(bool useAnnexB, AVPacket *pkt, const uint8_t *uuid,
+                             const char *message, uint32_t sei_message_size);
+int get_sei_from_av_frame(AVFrame *avFrame, unsigned char *dst, const char *filter);

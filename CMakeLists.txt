@@ -7,7 +7,9 @@ project(ffio)
 
 # set to -DCHECK_CUDA=0 means not add definition
 #        -DCHECK_CUDA=1 means add definition
+set(CHECK_CUDA 0)
 if(${CHECK_CUDA})
+    message(STATUS ">>>>>>>>>>>>>>>>>> ENABLE CUDA")
     enable_language(CUDA)
     find_package(CUDA REQUIRED)
 endif()
@@ -32,6 +34,11 @@ if(${CHECK_CUDA})
     set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CUDA_LIB_DIR_PATH})
 endif()
 
+include_directories(/home/devai/local/ffmpeg61/include/ /home/devai/miniconda3/envs/iqisai/include/python3.11)
+# link_directories(/home/devai/local/ffmpeg/lib)
+list(APPEND CMAKE_LIBRARY_PATH /home/devai/local/ffmpeg61/lib )
+list(APPEND CMAKE_LIBRARY_PATH /home/devai/miniconda3/envs/iqisai/lib )
+
 # make sure all the ffmpeg libs are located in the default system lib directories
 # otherwise you need to designate ffmpeg lib path via compile.sh
 find_library(FFMPEG_AVCODEC_LIBRARIES     "avcodec")
@@ -45,6 +52,8 @@ find_library(FFMPEG_SWSCALE_LIBRARIES     "swscale")
 if(${CHECK_CUDA})
     find_library(CUDA_CUDART_LIBRARIES "cudart")
 endif()
+
+message (STATUS ">>>>>>>>>>>>>> ${FFMPEG_SWSCALE_LIBRARIES}")
 
 message("Project source directory:    ${PROJECT_SOURCE_DIR}")
 message("Python_INCLUDE_DIRS:         ${PYTHON_INCLUDE_DIRS}")
@@ -169,3 +178,11 @@ target_include_directories(ffio.test PUBLIC
     ${PROJECT_SOURCE_DIR}/ffio/ffio_c)
 target_link_libraries(ffio.test
     ${FFIO_LIBRARIES})
+
+
+include_directories(${CMAKE_SOURCE_DIR}/ffio/ffio_c)
+find_package(Python COMPONENTS Interpreter Development)
+find_package(pybind11 CONFIG)
+find_package(fmt CONFIG REQUIRED)
+pybind11_add_module(iqisai iqisai/main.cc)
+target_link_libraries(iqisai PRIVATE interfaceAPI fmt::fmt-header-only)
